@@ -1,7 +1,7 @@
 var path,boy,cash,diamonds,jwellery,sword;
 var pathImg,boyImg,cashImg,diamondsImg,jwelleryImg,swordImg;
 var treasureCollection = 0;
-var cashG,diamondsG,jwelleryG,swordGroup;
+var cashG,diamondsG,jwelleryG,swordGroup,GoldGroup;
 
 //Game States
 var PLAY=1;
@@ -15,8 +15,9 @@ function preload(){
   diamondsImg = loadImage("diamonds.png");
   jwelleryImg = loadImage("jwell.png");
   swordImg = loadImage("sword.png");
- //write a code to load the image named gameOver.png
- 
+  gover = loadImage("gameOver.png");
+  GoldImg= loadImage("gold.jpg");
+  gameover= loadImage ("gameOver.png");
 }
 
 function setup(){
@@ -39,6 +40,7 @@ cashG=new Group();
 diamondsG=new Group();
 jwelleryG=new Group();
 swordGroup=new Group();
+GoldGroup= new Group();
 
 }
 
@@ -60,7 +62,7 @@ function draw() {
     createDiamonds();
     createJwellery();
     createSword();
-
+    createGold();
     if (cashG.isTouching(boy)) {
       cashG.destroyEach();
       treasureCollection=treasureCollection+50;
@@ -69,7 +71,14 @@ function draw() {
       diamondsG.destroyEach();
       treasureCollection=treasureCollection+100;
       
-    }else if(jwelleryG.isTouching(boy)) {
+    }else if (GoldGroup.isTouching(boy)) {
+      console.log("boytouchgold");
+      GoldGroup.destroyEach();
+      treasureCollection=treasureCollection+100;
+      
+    }
+    
+    else if(jwelleryG.isTouching(boy)) {
       jwelleryG.destroyEach();
       treasureCollection= treasureCollection + 150;
       
@@ -82,16 +91,19 @@ function draw() {
         diamondsG.destroyEach();
         jwelleryG.destroyEach();
         swordGroup.destroyEach();
+        GoldGroup.destroyEach();
+        boy.destroy();
         
         cashG.setVelocityYEach(0);
         diamondsG.setVelocityYEach(0);
         jwelleryG.setVelocityYEach(0);
         swordGroup.setVelocityYEach(0);
-//create a sprite
-//add a animation for gameover
-//scale the gameover image
+        GoldGroup.setVelocityYEach(0);
 
-       
+        
+         over = createSprite(180,280,20,20);
+         over.addAnimation("gameover",gover);
+        over.scale=0.7
      
     }
   }
@@ -146,4 +158,16 @@ function createSword(){
   sword.lifetime = 150;
   swordGroup.add(sword);
   }
+}
+
+function createGold(){
+  if (World.frameCount % 230 == 0) {
+    var Gold = createSprite(Math.round(random(50, 350),40, 10, 10));
+    Gold.debug;
+    Gold.addImage(GoldImg);
+    Gold.scale=0.1;
+    Gold.velocityY = 3;
+    Gold.lifetime = 175;
+    GoldGroup.add(Gold);
+    }
 }
